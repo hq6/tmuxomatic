@@ -2331,6 +2331,12 @@ def main():
     # Session name in tmux is always derived from the filename (pathname is dropped to avoid confusion)
     filename_only = ARGS.filename[ARGS.filename.rfind('/')+1:] # Get the filename only (drop the pathname)
     session_name = PROGRAM_THIS + "_" + filename_only # Session name with the executable name as a prefix
+    try:
+        # Session name cannot contain periods as of tmux 1.9a, but filenames
+        # commonly have extensions, so let's strip any extensions.
+        session_name = session_name[:session_name.index('.')]
+    except:
+        pass
     session_name = re.sub(r'([/])', r'_', session_name) # In case of session path: replace '/' with '_'
     session_name = re.sub(r'\_\_+', r'_', session_name) # Replace two or more consecutive underscores with one
 
